@@ -22,7 +22,7 @@ using System.IdentityModel.Services;
 using System.IdentityModel.Tokens;
 using System.Security.Claims;
 using System.Security.Principal;
-using Thinktecture.IdentityModel.Constants;
+using IdentityModel.Constants;
 
 namespace IdentityServer.WindowsAuthentication
 {

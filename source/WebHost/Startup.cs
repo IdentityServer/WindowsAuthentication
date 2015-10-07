@@ -1,8 +1,8 @@
-﻿using IdentityServer.WindowsAuthentication.Configuration;
+﻿using IdentityModel;
+using IdentityServer.WindowsAuthentication.Configuration;
 using Microsoft.Owin;
 using Owin;
 using System.Linq;
-using Thinktecture.IdentityModel;
 
 [assembly: OwinStartup(typeof(WebHost.Startup))]
 

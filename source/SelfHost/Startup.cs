@@ -1,7 +1,7 @@
-﻿using IdentityServer.WindowsAuthentication.Configuration;
+﻿using IdentityModel;
+using IdentityServer.WindowsAuthentication.Configuration;
 using Owin;
 using System.Linq;
-using Thinktecture.IdentityModel;
 
 namespace SelfHost
 {

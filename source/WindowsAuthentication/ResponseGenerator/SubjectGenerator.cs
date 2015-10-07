@@ -21,7 +21,8 @@ using System.IdentityModel.Tokens;
 using System.Linq;
 using System.Security.Claims;
 using System.Security.Principal;
-using Thinktecture.IdentityModel;
+using IdentityModel;
+using IdentityModel.Tokens;
 
 namespace IdentityServer.WindowsAuthentication
 {
