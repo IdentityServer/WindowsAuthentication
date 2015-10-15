@@ -14,6 +14,7 @@
  * limitations under the License.
  */
 
+using IdentityServer.WindowsAuthentication.Services;
 using System.Security.Cryptography.X509Certificates;
 
 namespace IdentityServer.WindowsAuthentication.Configuration
@@ -39,6 +40,7 @@ namespace IdentityServer.WindowsAuthentication.Configuration
             SubjectType = Configuration.SubjectType.Sid;
             EmitWindowsAccountNameAsName = true;
             EmitGroups = false;
+            CustomClaimsProvider = new DefaultCustomClaimsProvider();
             
             TokenLifeTime = 60;
         }
@@ -130,6 +132,11 @@ namespace IdentityServer.WindowsAuthentication.Configuration
         /// <c>true</c> if you want to emit the Windows account name as name claim; otherwise, <c>false</c>.
         /// </value>
         public bool EmitWindowsAccountNameAsName { get; set; }
+
+        /// <summary>
+        /// Gets or sets custom claims transformation logic.
+        /// </summary>
+        public ICustomClaimsProvider CustomClaimsProvider { get; set; }
 
         /// <summary>
         /// Gets or sets the public origin for the server (e.g. "https://yourserver:1234").

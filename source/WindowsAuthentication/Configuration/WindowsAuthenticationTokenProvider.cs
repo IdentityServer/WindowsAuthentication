@@ -14,6 +14,7 @@
  * limitations under the License.
  */
 
+using IdentityServer.WindowsAuthentication.Services;
 using Microsoft.Owin.Security.OAuth;
 using System.Security.Principal;
 using System.Threading.Tasks;
@@ -36,20 +37,24 @@ namespace IdentityServer.WindowsAuthentication.Configuration
             return Task.FromResult(0);
         }
 
-        public override Task GrantCustomExtension(OAuthGrantCustomExtensionContext context)
+        public override async Task GrantCustomExtension(OAuthGrantCustomExtensionContext context)
         {
             var windowsPrincipal = context.OwinContext.Authentication.User as WindowsPrincipal;
 
             if (windowsPrincipal == null)
             {
                 context.SetError("User is not a Windows user");
-                return Task.FromResult(0);
+                return;
             }
 
             var subject = SubjectGenerator.Create(windowsPrincipal, _options);
-            context.Validated(subject);
-
-            return Task.FromResult(0);
+            var transformationContext = new CustomClaimsProviderContext
+            {
+                WindowsPrincipal = windowsPrincipal,
+                OutgoingSubject = subject
+            };
+            await _options.CustomClaimsProvider.TransformAsync(transformationContext);
+            context.Validated(transformationContext.OutgoingSubject);
         }
     }
 }

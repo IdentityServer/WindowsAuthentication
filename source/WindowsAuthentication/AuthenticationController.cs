@@ -19,6 +19,7 @@ using IdentityServer.WindowsAuthentication.Logging;
 using System.IdentityModel.Services;
 using System.Net.Http;
 using System.Security.Principal;
+using System.Threading.Tasks;
 using System.Web.Http;
 
 namespace IdentityServer.WindowsAuthentication
@@ -36,7 +37,7 @@ namespace IdentityServer.WindowsAuthentication
         }
             
         [Route("")]
-        public IHttpActionResult Get()
+        public async Task<IHttpActionResult> Get()
         {
             WSFederationMessage message;
             if (WSFederationMessage.TryCreateFromUri(Request.RequestUri, out message))
@@ -63,7 +64,7 @@ namespace IdentityServer.WindowsAuthentication
                     }
 
                     Logger.Info("Sign-in request");
-                    return ProcessSignIn(signin, windowsUser);
+                    return await ProcessSignInAsync(signin, windowsUser);
                 }
 
                 var signout = message as SignOutRequestMessage;
@@ -98,10 +99,10 @@ namespace IdentityServer.WindowsAuthentication
             return new MetadataResult(entity);
         }
 
-        private IHttpActionResult ProcessSignIn(SignInRequestMessage request, WindowsPrincipal windowsUser)
+        private async Task<IHttpActionResult> ProcessSignInAsync(SignInRequestMessage request, WindowsPrincipal windowsUser)
         {
             var generator = new SignInResponseGenerator(_options);
-            var response = generator.Generate(request, windowsUser);
+            var response = await generator.GenerateAsync(request, windowsUser);
 
             return new SignInResult(response);
         }

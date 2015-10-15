@@ -23,13 +23,15 @@ using System.IdentityModel.Tokens;
 using System.Security.Claims;
 using System.Security.Principal;
 using IdentityModel.Constants;
+using System.Threading.Tasks;
+using IdentityServer.WindowsAuthentication.Services;
 
 namespace IdentityServer.WindowsAuthentication
 {
     internal class SignInResponseGenerator
     {
         private readonly static ILog Logger = LogProvider.GetCurrentClassLogger();
-        
+
         private readonly WindowsAuthenticationOptions _options;
 
         public SignInResponseGenerator(WindowsAuthenticationOptions options)
@@ -37,15 +39,23 @@ namespace IdentityServer.WindowsAuthentication
             _options = options;
         }
 
-        public SignInResponseMessage Generate(SignInRequestMessage request, WindowsPrincipal windowsPrincipal)
+        public async Task<SignInResponseMessage> GenerateAsync(SignInRequestMessage request, WindowsPrincipal windowsPrincipal)
         {
             Logger.Info("Creating WS-Federation signin response");
 
             // create subject
             var outgoingSubject = SubjectGenerator.Create(windowsPrincipal, _options);
 
+            // call custom claims tranformation logic
+            var context = new CustomClaimsProviderContext
+            {
+                WindowsPrincipal = windowsPrincipal,
+                OutgoingSubject = outgoingSubject
+            };
+            await _options.CustomClaimsProvider.TransformAsync(context);
+
             // create token for user
-            var token = CreateSecurityToken(outgoingSubject);
+            var token = CreateSecurityToken(context.OutgoingSubject);
 
             // return response
             var rstr = new RequestSecurityTokenResponse

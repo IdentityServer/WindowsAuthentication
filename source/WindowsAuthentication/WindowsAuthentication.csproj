@@ -103,6 +103,9 @@
     <Compile Include="ResponseGenerator\SignInResponseGenerator.cs" />
     <Compile Include="ResponseGenerator\SignInResult.cs" />
     <Compile Include="ResponseGenerator\SubjectGenerator.cs" />
+    <Compile Include="Services\CustomClaimsProviderContext.cs" />
+    <Compile Include="Services\DefaultCustomClaimsProvider.cs" />
+    <Compile Include="Services\ICustomClaimsProvider.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="..\default.licenseheader">
