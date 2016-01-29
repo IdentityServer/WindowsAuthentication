@@ -26,6 +26,7 @@ using Microsoft.Owin.Security.OAuth;
 using System;
 using System.Web.Http;
 using System.Web.Http.Dispatcher;
+using System.Web.Http.ExceptionHandling;
 
 namespace Owin
 {
@@ -54,6 +55,7 @@ namespace Owin
 
                 var webApiConfig = new HttpConfiguration();
                 webApiConfig.MapHttpAttributeRoutes();
+                webApiConfig.Services.Add(typeof(IExceptionLogger), new LogProviderExceptionLogger());
                 webApiConfig.Services.Replace(typeof(IHttpControllerTypeResolver), new ControllerResolver());
 
                 var builder = new ContainerBuilder();
