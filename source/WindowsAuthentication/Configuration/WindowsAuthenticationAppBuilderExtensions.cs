@@ -90,7 +90,8 @@ namespace Owin
                         AllowInsecureHttp = true,
                         TokenEndpointPath = new PathString("/token"),
                         Provider = new WindowsAuthenticationTokenProvider(options),
-                        AccessTokenFormat = new JwtFormat(options)
+                        AccessTokenFormat = new JwtFormat(options),
+                        AccessTokenExpireTimeSpan = TimeSpan.FromMinutes(options.TokenLifeTime)
                     });
             }
 
